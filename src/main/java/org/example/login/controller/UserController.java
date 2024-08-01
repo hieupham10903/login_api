@@ -1,5 +1,6 @@
 package org.example.login.controller;
 
+import org.example.login.entity.Salary;
 import org.example.login.entity.User;
 import org.example.login.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -75,4 +76,9 @@ public class UserController {
         List<User> users = userService.searchByName(name);
         return ResponseEntity.ok(users);
     }
+
+//    @GetMapping("/user/salary/{userId}")
+//    public Salary getSalaryByUserId(@PathVariable Long userId) {
+//        return userService.getSalaryByUserId(userId);
+//    }
 }

@@ -1,6 +1,8 @@
 package org.example.login.service;
 
+import org.example.login.entity.Salary;
 import org.example.login.entity.User;
+import org.example.login.repository.SalaryRepository;
 import org.example.login.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,6 +14,9 @@ import java.util.Optional;
 public class UserService {
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private SalaryRepository salaryRepository;
 
     public Optional<User> findByEmail(String email) {
         return userRepository.findByEmail(email);
@@ -36,4 +41,8 @@ public class UserService {
     public List<User> searchByName(String name) {
         return userRepository.findByFullnameContainingIgnoreCase(name);
     }
+
+//    public Salary getSalaryByUserId(Long userId) {
+//        return salaryRepository.findByUserId(userId);
+//    }
 }
