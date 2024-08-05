@@ -1,7 +1,9 @@
 package org.example.login.entity;
 
 import jakarta.persistence.*;
+import jakarta.persistence.criteria.CriteriaBuilder;
 
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
@@ -25,13 +27,17 @@ public class Attendance {
     @Column(name = "check_out")
     private LocalDateTime checkOut;
 
+    @Column(name = "working_minutes")
+    private Integer  workingMinutes;
+
     public Attendance() {}
 
-    public Attendance(Long userId, LocalDate date, LocalDateTime checkIn, LocalDateTime checkOut) {
+    public Attendance(Long userId, LocalDate date, LocalDateTime checkIn, LocalDateTime checkOut, Integer workingMinutes) {
         this.userId = userId;
         this.date = date;
         this.checkIn = checkIn;
         this.checkOut = checkOut;
+        this.workingMinutes = workingMinutes;
     }
 
     public Long getId() {
@@ -72,5 +78,20 @@ public class Attendance {
 
     public void setCheckOut(LocalDateTime checkOut) {
         this.checkOut = checkOut;
+    }
+
+    public Integer getWorkingMinutes() {
+        return workingMinutes;
+    }
+
+    public void setWorkingMinutes(Integer workingMinutes) {
+        this.workingMinutes = workingMinutes;
+    }
+
+    public void calculateWorkingMinutes() {
+        if (checkIn != null && checkOut != null) {
+            Duration duration = Duration.between(checkIn, checkOut);
+            this.workingMinutes = (int) duration.toMinutes();
+        }
     }
 }

@@ -48,7 +48,7 @@ public class AttendanceService {
 
         ZonedDateTime nowZoned = ZonedDateTime.now(timeZone);
         LocalDateTime now = nowZoned.toLocalDateTime();
-        Attendance attendance = new Attendance(userId, today, now, null);
+        Attendance attendance = new Attendance(userId, today, now, null, null);
         return attendanceRepository.save(attendance);
     }
 
@@ -64,6 +64,7 @@ public class AttendanceService {
         ZonedDateTime nowZoned = ZonedDateTime.now(timeZone);
         LocalDateTime now = nowZoned.toLocalDateTime();
         attendance.setCheckOut(now);
+        attendance.calculateWorkingMinutes();
         return attendanceRepository.save(attendance);
     }
 }
