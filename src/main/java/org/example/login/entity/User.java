@@ -23,6 +23,12 @@ public class User {
     @Column(name = "birthday")
     private Date birthday;
 
+    @Column(name = "position")
+    private String position;
+
+    @Column(name = "department")
+    private String department;
+
     @Enumerated(EnumType.STRING)
     private Role role;
 
@@ -89,5 +95,21 @@ public class User {
 
     public void setRole(Role role) {
         this.role = role;
+    }
+
+    public String getPosition() {
+        return position;
+    }
+
+    public void setPosition(String position) {
+        this.position = position;
+    }
+
+    public String getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(String department) {
+        this.department = department;
     }
 }

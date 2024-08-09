@@ -4,6 +4,7 @@ import org.example.login.entity.Attendance;
 import org.example.login.entity.Salary;
 import org.example.login.entity.User;
 import org.example.login.repository.AttendanceRepository;
+import org.example.login.repository.SalaryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +20,13 @@ public class AttendanceService {
 
     @Autowired
     private AttendanceRepository attendanceRepository;
+
+    @Autowired
+    private SalaryRepository salaryRepository;
+
+    @Autowired
+    private SalaryService salaryService;
+
 
     private final ZoneId timeZone = ZoneId.of("Asia/Ho_Chi_Minh");
 
@@ -65,6 +73,30 @@ public class AttendanceService {
         LocalDateTime now = nowZoned.toLocalDateTime();
         attendance.setCheckOut(now);
         attendance.calculateWorkingMinutes();
+
+        if (attendance.getWorkingMinutes() < 600) {
+            updatePenaltyCount(userId, today);
+        }
+
         return attendanceRepository.save(attendance);
     }
+
+    private void updatePenaltyCount(Long userId, LocalDate date) {
+        LocalDate startOfMonth = date.withDayOfMonth(1);
+        Optional<Salary> salaryOpt = salaryRepository.findByUserIdAndDate(userId, startOfMonth);
+
+        Salary salary;
+        if (!salaryOpt.isPresent()) {
+            salary = new Salary();
+            salary.setUserId(userId);
+            salary.setDate(startOfMonth);
+            salary.setPenaltyCount(1);
+        } else {
+            salary = salaryOpt.get();
+            salary.setPenaltyCount(salary.getPenaltyCount() + 1);
+        }
+        salary.calculateFine();
+        salaryService.saveSalary(salary);
+    }
+
 }
